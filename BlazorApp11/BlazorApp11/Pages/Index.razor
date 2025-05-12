@@ -1,0 +1,694 @@
+﻿@page "/"                               // Define la ruta de la página
+@using BlazorApp11.Data                // Importa el espacio de nombres para acceso a datos
+@using BlazorApp11.Models              // Importa los modelos usados en la simulación
+@inject AppDbContext _dbContext        // Inyecta el contexto de base de datos
+@implements IDisposable                // Permite liberar recursos al destruir el componente
+
+<h3>Simulación de Movimiento de Elementos entre Nodos</h3>
+
+<!-- Muestra el valor actual de la condición (usada para semáforo) -->
+<p style="font-weight: bold;">Condición = @condicion</p>
+
+<!-- Componente visual del semáforo -->
+<div class="semaforo">
+    <!-- Luz roja activa si condicion == 0 -->
+    <div class="luz" id="rojo" style="background-color: @(condicion == 0 ? "red" : "lightgray")"></div>
+    <!-- Luz verde activa si condicion == 1 -->
+    <div class="luz" id="verde" style="background-color: @(condicion == 1 ? "green" : "lightgray")"></div>
+</div>
+
+<!-- Contenedor principal del mapa visual estilo ciudad -->
+<div class="mapa">
+
+    <!-- Árboles decorativos colocados en posiciones absolutas para ambientar el mapa -->
+    @* Elementos decorativos *@
+    <div class="decoracion arbol" style="top: 40px; left: 40px;"></div>
+    <div class="decoracion arbol" style="top: 60px; left: 420px;"></div>
+    <div class="decoracion arbol" style="top: 80px; left: 520px;"></div>
+    <div class="decoracion arbol" style="top: 100px; left: 300px;"></div>
+    <div class="decoracion arbol" style="top: 120px; left: 640px;"></div>
+    <div class="decoracion arbol" style="top: 140px; left: 160px;"></div>
+    <div class="decoracion arbol" style="top: 160px; left: 700px;"></div>
+    <div class="decoracion arbol" style="top: 180px; left: 80px;"></div>
+    <div class="decoracion arbol" style="top: 200px; left: 580px;"></div>
+    <div class="decoracion arbol" style="top: 220px; left: 100px;"></div>
+
+    <div class="decoracion arbol" style="top: 240px; left: 700px;"></div>
+    <div class="decoracion arbol" style="top: 260px; left: 320px;"></div>
+    <div class="decoracion arbol" style="top: 280px; left: 160px;"></div>
+    <div class="decoracion arbol" style="top: 300px; left: 580px;"></div>
+    <div class="decoracion arbol" style="top: 320px; left: 720px;"></div>
+    <div class="decoracion arbol" style="top: 340px; left: 40px;"></div>
+    <div class="decoracion arbol" style="top: 360px; left: 360px;"></div>
+    <div class="decoracion arbol" style="top: 380px; left: 540px;"></div>
+    <div class="decoracion arbol" style="top: 400px; left: 200px;"></div>
+    <div class="decoracion arbol" style="top: 420px; left: 720px;"></div>
+
+    <div class="decoracion arbol" style="top: 440px; left: 480px;"></div>
+    <div class="decoracion arbol" style="top: 460px; left: 300px;"></div>
+    <div class="decoracion arbol" style="top: 480px; left: 180px;"></div>
+    <div class="decoracion arbol" style="top: 500px; left: 560px;"></div>
+    <div class="decoracion arbol" style="top: 520px; left: 720px;"></div>
+    <div class="decoracion arbol" style="top: 540px; left: 60px;"></div>
+    <div class="decoracion arbol" style="top: 560px; left: 340px;"></div>
+    <div class="decoracion arbol" style="top: 580px; left: 500px;"></div>
+    <div class="decoracion arbol" style="top: 600px; left: 380px;"></div>
+    <div class="decoracion arbol" style="top: 620px; left: 720px;"></div>
+
+    <div class="decoracion arbol" style="top: 50px; left: 260px;"></div>
+    <div class="decoracion arbol" style="top: 100px; left: 180px;"></div>
+    <div class="decoracion arbol" style="top: 150px; left: 460px;"></div>
+    <div class="decoracion arbol" style="top: 200px; left: 260px;"></div>
+    <div class="decoracion arbol" style="top: 250px; left: 440px;"></div>
+    <div class="decoracion arbol" style="top: 300px; left: 100px;"></div>
+    <div class="decoracion arbol" style="top: 350px; left: 260px;"></div>
+    <div class="decoracion arbol" style="top: 400px; left: 620px;"></div>
+    <div class="decoracion arbol" style="top: 450px; left: 120px;"></div>
+    <div class="decoracion arbol" style="top: 500px; left: 400px;"></div>
+
+    <div class="decoracion arbol" style="top: 550px; left: 300px;"></div>
+    <div class="decoracion arbol" style="top: 600px; left: 200px;"></div>
+    <div class="decoracion arbol" style="top: 70px; left: 620px;"></div>
+    <div class="decoracion arbol" style="top: 180px; left: 380px;"></div>
+    <div class="decoracion arbol" style="top: 360px; left: 80px;"></div>
+
+
+
+
+    <!-- Bucle para dibujar los 10 nodos de la simulación -->
+    @for (int i = 0; i < 10; i++)
+    {
+        // Define la posición CSS de cada nodo en base a su índice
+        var estilos = i switch
+        {
+            0 => "top: 125px; left: 0px;",       // Nodo horizontal
+            1 => "top: 125px; left: 200px;",
+            2 => "top: 125px; left: 400px;",
+            3 => "top: 125px; left: 600px;",     // Nodo vertical
+            4 => "top: 325px; left: 400px;",     // Nodo horizontal
+            5 => "top: 325px; left: 200px;",
+            6 => "top: 325px; left: 175px;",     // Nodo vertical ajustado (alineación)
+            7 => "top: 525px; left: 200px;",     // Nodo horizontal
+            8 => "top: 525px; left: 400px;",
+            9 => "top: 525px; left: 600px;",     // Nodo vertical
+            _ => ""
+        };
+
+        // Define la clase del nodo: horizontal o vertical
+        var clase = (i == 0 || i == 1 || i == 2 || i == 4 || i == 5 || i == 7 || i == 8)
+        ? "nodo nodo-horizontal"
+        : "nodo nodo-vertical";
+
+        // Renderiza el nodo en su posición con su clase
+        <div class="@clase" style="@estilos">
+            <div class="contenedor-elementos">
+                <!-- Dibuja hasta 5 elementos en el nodo, representados como círculos -->
+                @foreach (var item in simulador.GetElementosEnCola(i).Take(5))
+                {
+                    <div class="elemento"></div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Título descriptivo de la sección -->
+<p><strong>Flujo de elementos y estado actual:</strong></p>
+
+<!-- Tabla principal con estilo colapsado y margen inferior -->
+<table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+
+    <!-- Encabezado de la tabla con fondo gris claro -->
+    <thead style="background-color: #f2f2f2;">
+        <tr>
+            <!-- Título de cada columna -->
+            <th style="padding: 8px; border: 1px solid #ccc;">Flujo Nodo A → Nodo B</th>
+            <th style="padding: 8px; border: 1px solid #ccc;">Congestión Máxima</th>
+            <th style="padding: 8px; border: 1px solid #ccc;">Tiempo Estimado de Recorrido</th>
+            <th style="padding: 8px; border: 1px solid #ccc;">Estado Actual</th>
+        </tr>
+    </thead>
+
+    <!-- Cuerpo de la tabla -->
+    <tbody>
+        <tr>
+            <!-- Columna 1: Lista de flujos entre nodos (generada dinámicamente) -->
+            <td style="padding: 8px; border: 1px solid #ccc;">
+                <!-- Lista sin viñetas ni márgenes -->
+                <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                    @{
+                        // Se recorre la lista enlazada de flujos (flujoActual)
+                        var flujoActual = flujosPares;
+                        while (flujoActual != null)
+                        {
+                            // Se muestra el texto del flujo
+                            <li>@flujoActual.Texto</li>
+                            ;
+                            flujoActual = flujoActual.Siguiente;
+                        }
+                    }
+                </ul>
+            </td>
+
+            <!-- Columna 2: Muestra el valor de mayor congestión -->
+            <td style="padding: 8px; border: 1px solid #ccc;">@mayorCongestion</td>
+
+            <!-- Columna 3: Lista de tiempos estimados (generada dinámicamente) -->
+            <td style="padding: 8px; border: 1px solid #ccc;">
+                <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                    @{
+                        var tiempoActual = tiemposCombinaciones;
+                        while (tiempoActual != null)
+                        {
+                            <li>@tiempoActual.Texto</li>
+                            ;
+                            tiempoActual = tiempoActual.Siguiente;
+                        }
+                    }
+                </ul>
+            </td>
+
+            <!-- Columna 4: Lista de estados actuales de los nodos (generada dinámicamente) -->
+            <td style="padding: 8px; border: 1px solid #ccc;">
+                <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                    @{
+                        var estadoActual = estadosActuales;
+                        while (estadoActual != null)
+                        {
+                            <li>@estadoActual.Texto</li>
+                            ;
+                            estadoActual = estadoActual.Siguiente;
+                        }
+                    }
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<style>
+
+   
+    /* === ELEMENTOS DECORATIVOS === */
+
+    /* Clase base para decoraciones como árboles, faroles, etc. */
+    .decoracion {
+        position: absolute; /* Permite colocar el elemento en coordenadas específicas */
+        width: 40px;
+        height: 40px;
+        z-index: 0; /* Detrás de otros elementos como nodos */
+        opacity: 0.8; /* Ligeramente transparente para simular integración con fondo */
+    }
+
+        /* Especificación para los elementos de tipo árbol */
+        .decoracion.arbol {
+            position: absolute;
+            width: 20px; /* Más angosto que el contenedor base */
+            height: 40px;
+            display: flex; /* Permite alinear tronco y copa verticalmente */
+            flex-direction: column;
+            align-items: center; /* Centra el tronco y la copa en horizontal */
+            z-index: 0;
+        }
+
+            /* Parte inferior del árbol (tronco) */
+            .decoracion.arbol::before {
+                content: ""; /* Pseudo-elemento para el tronco */
+                width: 6px;
+                height: 12px;
+                background-color: #8B4513; /* Color marrón simulando madera */
+                border-radius: 1px; /* Esquinas suavemente redondeadas */
+            }
+
+            /* Parte superior del árbol (copa) */
+            .decoracion.arbol::after {
+                content: ""; /* Pseudo-elemento para la copa del árbol */
+                width: 24px;
+                height: 24px;
+                background: radial-gradient(circle at 50% 40%, #3cb043 50%, #228B22 100%);
+                border-radius: 50%; /* Forma circular */
+                margin-top: 2px; /* Pequeña separación desde el tronco */
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra para profundidad */
+            }
+
+
+    /* === MAPA PRINCIPAL === */
+    .mapa {
+        position: relative; /* Contenedor base para posicionamiento absoluto interno */
+        width: 900px;
+        height: 800px;
+        margin: auto; /* Centrado horizontal en la página */
+        background-color: #d3ff72; /* Verde claro tipo césped o parque */
+        border: 20px solid #444; /* Borde grueso oscuro como marco del mapa */
+        border-radius: 15px; /* Esquinas suavemente redondeadas */
+        /* Comentado: patrón de cuadrícula decorativa, útil para diseño tipo ciudad */
+        <!-- background-image: linear-gradient(to right, #444 35px, transparent 2px), linear-gradient(to bottom, #444 35px, transparent 2px); -->
+
+        background-size: 150px 150px; /* Tamaño de los bloques de la cuadrícula (si se habilita) */
+    }
+
+
+    /* === SEMÁFORO === */
+    .semaforo {
+        width: 100px;
+        height: 250px;
+        border-radius: 10px;
+        background-color: #333; /* Color gris oscuro para carcasa */
+        display: flex;
+        flex-direction: column; /* Luces apiladas verticalmente */
+        justify-content: space-between;
+        padding: 10px;
+        align-items: center; /* Centra las luces horizontalmente */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra externa sutil */
+        margin-bottom: 20px;
+    }
+
+    /* Cada luz del semáforo */
+    .luz {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%; /* Forma circular */
+        background-color: lightgray; /* Color apagado por defecto */
+        transition: background-color 0.5s ease; /* Suaviza el cambio de color */
+    }
+
+
+    /* === NODOS (estaciones/intersecciones) === */
+    .nodo {
+        position: absolute; /* Posicionado manualmente en el mapa */
+        display: flex;
+        background-color: #444; /* Gris oscuro para distinguir del fondo */
+        border-radius: 15px; /* Esquinas redondeadas */
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Nodo horizontal: vehículo fluye de izquierda a derecha */
+    .nodo-horizontal {
+        width: 220px;
+        height: 40px;
+        flex-direction: row; /* Elementos en fila horizontal */
+    }
+
+    /* Nodo vertical: vehículo fluye de arriba hacia abajo */
+    .nodo-vertical {
+        width: 40px;
+        height: 240px;
+        flex-direction: column; /* Elementos en columna vertical */
+    }
+
+
+    /* === CONTENEDOR INTERNO DE ELEMENTOS DENTRO DE NODOS === */
+    .contenedor-elementos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        overflow: hidden; /* Esconde elementos que se salen del nodo */
+    }
+
+    /* Alineación para nodos horizontales */
+    .nodo-horizontal .contenedor-elementos {
+        flex-direction: row;
+    }
+
+    /* Alineación para nodos verticales */
+    .nodo-vertical .contenedor-elementos {
+        flex-direction: column;
+    }
+
+
+    /* === ELEMENTOS QUE SE MUEVEN ENTRE NODOS === */
+    .elemento {
+        width: 16px;
+        height: 16px;
+        background-color: blue; /* Color del "vehículo" o entidad */
+        border-radius: 50%; /* Círculo */
+        border: 1px solid #333; /* Borde para mayor contraste */
+        margin: 8px; /* Separación entre elementos */
+    }
+
+
+</style>
+
+@code {
+    private SimuladorDeColas simulador = new SimuladorDeColas(); // Instancia del simulador
+    private System.Timers.Timer timerMovimiento;                 // Timer para mover elementos periódicamente
+    private System.Timers.Timer timerCondicion;                  // Timer para alternar la condición de ejecución
+    private int condicion = 1;                                   // Condición para decidir si se ejecuta el movimiento
+    private int contadorElementos = 1;                           // Contador para nombrar nuevos elementos
+    private bool maxElementosAlcanzados = false;                 // Bandera para limitar la cantidad de elementos
+
+    private NodoTexto? flujosPares = null;                       // Lista enlazada para registrar flujos entre nodos
+    private string mayorCongestion = "";                         // Nodo más congestionado actualmente
+    private NodoTexto? tiemposCombinaciones = null;              // Tiempos estimados entre pares de nodos
+    private NodoTexto? estadosActuales = null;                   // Estado de cada nodo en tiempo real
+
+    // Método que se ejecuta al inicializar el componente
+    protected override void OnInitialized()
+    {
+        simulador.Inicializar(); // Llenar el primer nodo con los elementos iniciales
+
+        // Timer que ejecuta el movimiento cada 300 ms
+        timerMovimiento = new System.Timers.Timer(300);
+        timerMovimiento.Elapsed += async (_, _) =>
+        {
+            timerMovimiento.Stop(); // Detener temporalmente para evitar superposiciones
+
+            if (condicion == 1)
+            {
+                simulador.MoverElementoSecuencial(); // Mover elementos entre nodos
+
+                // Agregar nuevos elementos mientras haya espacio en el primer nodo
+                if (!maxElementosAlcanzados && simulador.TieneEspacioEnPrimerNodo())
+                {
+                    simulador.EncolarEnPrimerNodo($"elemento{contadorElementos++}");
+                    if (contadorElementos > 10)
+                    {
+                        maxElementosAlcanzados = true; // Se alcanzó el límite de elementos
+                    }
+                }
+            }
+
+            await CalcularMovimientoYCongestion(); // Recalcular métricas del sistema
+
+            InvokeAsync(StateHasChanged); // Refrescar la UI
+
+            timerMovimiento.Start(); // Reactivar el timer
+        };
+        timerMovimiento.Start(); // Iniciar el timer
+
+        // Timer para alternar la condición cada 3 segundos (pausa/reanuda simulación)
+        timerCondicion = new System.Timers.Timer(3000);
+        timerCondicion.Elapsed += (_, _) =>
+        {
+            condicion = condicion == 1 ? 0 : 1; // Alternar entre 1 y 0
+            InvokeAsync(StateHasChanged);      // Refrescar UI para reflejar cambio
+        };
+        timerCondicion.Start(); // Iniciar el timer
+    }
+
+    // Método asincrónico para calcular el estado de flujos, tiempos y congestión
+    private async Task CalcularMovimientoYCongestion()
+    {
+        flujosPares = null;
+        tiemposCombinaciones = null;
+        estadosActuales = null;
+
+        int maxCongestion = -1;
+        int nodoMasCongestionado = -1;
+
+        // Calcular flujo y tiempo estimado entre Nodo 1 y los demás nodos
+        for (int i = 1; i < 10; i++)
+        {
+            int cantidadA = simulador.GetCantidadEncolados(0);  // Nodo 1
+            int cantidadB = simulador.GetCantidadEncolados(i);  // Nodo i+1
+
+            // Agregar texto a la lista de flujos
+            AgregarNodo(ref flujosPares, $"Nodo 1 → Nodo {i + 1}: {cantidadA} → {cantidadB} elementos");
+
+            // Crear objeto de flujo (puede usarse para guardar en base de datos)
+            var flujo = new Flujo
+                {
+                    NodoOrigen = 1,
+                    NodoDestino = i + 1,
+                    CantidadOrigen = cantidadA,
+                    CantidadDestino = cantidadB,
+                    FechaRegistro = DateTime.Now
+                };
+
+            // Calcular tiempo estimado arbitrario
+            double tiempoCombinacion = (cantidadA + cantidadB) * 2;
+            var tiempoEstimado = new TiempoEstimado
+                {
+                    NodoOrigen = 1,
+                    NodoDestino = i + 1,
+                    Tiempo = tiempoCombinacion,
+                    FechaRegistro = DateTime.Now
+                };
+
+            // Agregar a la lista textual los tiempos calculados
+            AgregarNodo(ref tiemposCombinaciones, $"Nodo 1 → Nodo {i + 1}: {tiempoCombinacion} segundos");
+
+            // NOTA: Aquí podrías guardar 'flujo' y 'tiempoEstimado' en tu base de datos
+        }
+
+        // Buscar el nodo más congestionado
+        for (int i = 0; i < 10; i++)
+        {
+            int cantidad = simulador.GetCantidadEncolados(i);
+            if (cantidad > maxCongestion)
+            {
+                maxCongestion = cantidad;
+                nodoMasCongestionado = i + 1;
+            }
+        }
+        mayorCongestion = $"Nodo {nodoMasCongestionado} con {maxCongestion} elementos";
+
+        // Generar el estado actual de cada nodo
+        for (int i = 0; i < 10; i++)
+        {
+            int cantidad = simulador.GetCantidadEncolados(i);
+            AgregarNodo(ref estadosActuales, $"Nodo {i + 1}: {cantidad} elementos");
+
+            var estadoNodo = new EstadoNodo
+                {
+                    NodoId = i + 1,
+                    CantidadEncolados = cantidad,
+                    FechaRegistro = DateTime.Now
+                };
+
+            // NOTA: Aquí también podrías guardar 'estadoNodo' en base de datos si lo necesitas
+        }
+    }
+
+    // Método auxiliar para agregar texto a una lista enlazada de tipo NodoTexto
+    private void AgregarNodo(ref NodoTexto? lista, string texto)
+    {
+        var nuevo = new NodoTexto(texto);
+        if (lista == null)
+        {
+            lista = nuevo;
+        }
+        else
+        {
+            var actual = lista;
+            while (actual.Siguiente != null)
+            {
+                actual = actual.Siguiente;
+            }
+            actual.Siguiente = nuevo; // Agrega al final
+        }
+    }
+
+    // Método para liberar los recursos al destruir el componente
+    public void Dispose()
+    {
+        timerMovimiento?.Dispose();
+        timerCondicion?.Dispose();
+    }
+
+    // Clase auxiliar para representar flujo entre nodos
+    public class Flujo
+    {
+        public int NodoOrigen { get; set; }
+        public int NodoDestino { get; set; }
+        public int CantidadOrigen { get; set; }
+        public int CantidadDestino { get; set; }
+        public DateTime FechaRegistro { get; set; }
+    }
+
+
+
+
+
+    // Representa el tiempo estimado de traslado entre dos nodos
+    public class TiempoEstimado
+    {
+        public int NodoOrigen { get; set; }            // ID del nodo de origen
+        public int NodoDestino { get; set; }           // ID del nodo de destino
+        public double Tiempo { get; set; }             // Tiempo estimado entre los nodos
+        public DateTime FechaRegistro { get; set; }    // Fecha y hora en que se registró el tiempo
+    }
+
+    // Representa el estado de un nodo en un momento específico
+    public class EstadoNodo
+    {
+        public int NodoId { get; set; }                // Identificador del nodo
+        public int CantidadEncolados { get; set; }     // Cantidad de elementos encolados en ese nodo
+        public DateTime FechaRegistro { get; set; }    // Fecha y hora del registro del estado
+    }
+
+    // Representa un nodo simple con un nombre y un puntero al siguiente nodo
+    public class Nodo
+    {
+        public string Nombre;          // Nombre del nodo (puede representar un elemento)
+        public Nodo? Siguiente;        // Referencia al siguiente nodo en la estructura
+
+        public Nodo(string nombre)
+        {
+            Nombre = nombre;
+            Siguiente = null;         // Por defecto, no apunta a ningún otro nodo
+        }
+    }
+
+    // Variante del nodo anterior, pero con texto (posiblemente usado en otras estructuras)
+    public class NodoTexto
+    {
+        public string Texto;           // Contenido textual del nodo
+        public NodoTexto? Siguiente;   // Referencia al siguiente nodo
+
+        public NodoTexto(string texto)
+        {
+            Texto = texto;
+            Siguiente = null;
+        }
+    }
+
+    // Representa una cola de nodos con límite de capacidad
+    public class ColaNodo
+    {
+        public Nodo? frente;          // Nodo al frente de la cola (el primero en salir)
+        public Nodo? fondo;           // Nodo al fondo de la cola (el último en entrar)
+        public int limite = 5;        // Límite máximo de elementos en la cola
+
+        // Encola un nuevo nodo si no se ha alcanzado el límite
+        public void Encolar(string nombre)
+        {
+            if (ContarElementos() >= limite) return;
+
+            var nuevo = new Nodo(nombre);
+            if (fondo == null)
+            {
+                // Si la cola está vacía, el nuevo nodo será tanto el frente como el fondo
+                frente = fondo = nuevo;
+            }
+            else
+            {
+                // Si ya hay nodos, se agrega al final
+                fondo.Siguiente = nuevo;
+                fondo = nuevo;
+            }
+        }
+
+        // Desencola el nodo al frente de la cola y devuelve su nombre
+        public string? Desencolar()
+        {
+            if (frente == null) return null;  // Cola vacía
+
+            string nombre = frente.Nombre;    // Guardamos el nombre del nodo
+            frente = frente.Siguiente;        // Avanzamos el frente
+            if (frente == null) fondo = null; // Si la cola quedó vacía, fondo también debe ser null
+            return nombre;
+        }
+
+        // Retorna todos los elementos en la cola en orden
+        public IEnumerable<Nodo> ObtenerElementos()
+        {
+            var actual = frente;
+            while (actual != null)
+            {
+                yield return actual;
+                actual = actual.Siguiente;
+            }
+        }
+
+        public bool EstaVacia() => frente == null; // Verifica si la cola está vacía
+
+        public bool TieneEspacio() => ContarElementos() < limite; // Verifica si aún se pueden encolar más nodos
+
+        // Cuenta cuántos nodos hay actualmente en la cola
+        public int ContarElementos()
+        {
+            int count = 0;
+            var actual = frente;
+            while (actual != null)
+            {
+                count++;
+                actual = actual.Siguiente;
+            }
+            return count;
+        }
+    }
+
+    // Clase principal que simula el movimiento de elementos a través de varias colas (nodos)
+    public class SimuladorDeColas
+    {
+        public ColaNodo[] colas = new ColaNodo[10];  // Arreglo de 10 colas (representan 10 nodos)
+        public Nodo? elementoEnMovimiento = null;    // Nodo temporal que está en movimiento
+        public int posicionActual = -1;              // Posición destino del nodo en movimiento
+
+        public SimuladorDeColas()
+        {
+            // Inicializa las 10 colas
+            for (int i = 0; i < colas.Length; i++)
+            {
+                colas[i] = new ColaNodo();
+            }
+        }
+
+        // Llena el primer nodo (cola[0]) con 10 elementos iniciales
+        public void Inicializar()
+        {
+            for (int i = 1; i <= 10; i++)
+            {
+                colas[0].Encolar($"elemento{i}");
+            }
+        }
+
+        // Intenta encolar un nuevo elemento al primer nodo si hay espacio
+        public void EncolarEnPrimerNodo(string nombre)
+        {
+            if (colas[0].TieneEspacio())
+                colas[0].Encolar(nombre);
+        }
+
+        public bool TieneEspacioEnPrimerNodo() => colas[0].TieneEspacio(); // Verifica espacio en la primera cola
+
+        // Mueve un elemento de una cola a la siguiente de manera secuencial
+        public void MoverElementoSecuencial()
+        {
+            if (elementoEnMovimiento == null)
+            {
+                // Si no hay un elemento en movimiento, buscar uno para mover
+                for (int i = 0; i < colas.Length - 1; i++)
+                {
+                    if (!colas[i].EstaVacia() && colas[i + 1].TieneEspacio())
+                    {
+                        // Desencolar del nodo actual y preparar para mover al siguiente
+                        string nombreElemento = colas[i].Desencolar();
+                        elementoEnMovimiento = new Nodo(nombreElemento);
+                        posicionActual = i + 1;
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                // Si ya hay un nodo en movimiento, verificar si puede colocarse en la cola destino
+                if (posicionActual < colas.Length && colas[posicionActual].TieneEspacio())
+                {
+                    colas[posicionActual].Encolar(elementoEnMovimiento.Nombre);
+                    elementoEnMovimiento = null;
+                    posicionActual = -1;
+                }
+            }
+        }
+
+        // Devuelve los elementos actuales en una cola específica
+        public IEnumerable<Nodo> GetElementosEnCola(int indice)
+        {
+            return colas[indice].ObtenerElementos();
+        }
+
+        // Devuelve la cantidad de elementos en una cola específica
+        public int GetCantidadEncolados(int indice)
+        {
+            return colas[indice].ContarElementos();
+        }
+    }
+
+}
+
+                

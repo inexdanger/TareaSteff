@@ -1,0 +1,151 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|c:\\users\\stefany\\source\\repos\\blazorapp11\\blazorapp11\\pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|solutionrelative:blazorapp11\\pages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|c:\\users\\stefany\\source\\repos\\blazorapp11\\blazorapp11\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|solutionrelative:blazorapp11\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|c:\\users\\stefany\\source\\repos\\blazorapp11\\blazorapp11\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|solutionrelative:blazorapp11\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|c:\\users\\stefany\\source\\repos\\blazorapp11\\blazorapp11\\models\\modelos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8683031-E245-4BAB-9D48-3A8034004AFA}|BlazorApp11\\BlazorApp11.csproj|solutionrelative:blazorapp11\\models\\modelos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 159,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.razor",
+              "DocumentMoniker": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Pages\\Index.razor",
+              "RelativeDocumentMoniker": "BlazorApp11\\Pages\\Index.razor",
+              "ToolTip": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Pages\\Index.razor",
+              "RelativeToolTip": "BlazorApp11\\Pages\\Index.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-09T16:45:00.11Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:11:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:12:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Program.cs",
+              "RelativeDocumentMoniker": "BlazorApp11\\Program.cs",
+              "ToolTip": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Program.cs",
+              "RelativeToolTip": "BlazorApp11\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T14:04:34.094Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "BlazorApp11\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "BlazorApp11\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T14:04:31.044Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Modelos.cs",
+              "DocumentMoniker": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Models\\Modelos.cs",
+              "RelativeDocumentMoniker": "BlazorApp11\\Models\\Modelos.cs",
+              "ToolTip": "C:\\Users\\Stefany\\source\\repos\\BlazorApp11\\BlazorApp11\\Models\\Modelos.cs",
+              "RelativeToolTip": "BlazorApp11\\Models\\Modelos.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T14:04:27.944Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
