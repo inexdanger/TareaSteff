@@ -1,0 +1,80 @@
+
+CREATE DATABASE SimulacionNodos;
+
+USE SimulacionNodos;
+
+-- Creación de la tabla 'Semaforos' (estado del semáforo)
+CREATE TABLE Semaforos (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Nodo INT NOT NULL,  -- Nodo al que pertenece el semáforo (1-10)
+    Estado VARCHAR(10) NOT NULL -- Estado del semáforo: "Rojo" o "Verde"
+);
+
+-- Creación de la tabla 'Vias' (Tipo de vía conectada en cada dirección)
+CREATE TABLE Vias (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    NodoOrigen INT NOT NULL,  -- Nodo de origen
+    NodoDestino INT NOT NULL,  -- Nodo de destino
+    Direccion VARCHAR(10) NOT NULL -- Norte, Sur, Este, Oeste
+);
+
+-- Creación de la tabla 'VehiculosEnEspera' (Cantidad de vehículos en espera en cada nodo)
+CREATE TABLE VehiculosEnEspera (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Nodo INT NOT NULL,  -- Nodo donde los vehículos están esperando (1-10)
+    Cantidad INT NOT NULL -- Cantidad de vehículos esperando
+);
+
+-- Creación de la tabla 'TiempoTransito' (Tiempo promedio de tránsito por el cruce entre nodos)
+CREATE TABLE TiempoTransito (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    NodoOrigen INT NOT NULL,  -- Nodo de origen
+    NodoDestino INT NOT NULL,  -- Nodo de destino
+    TiempoPromedio INT NOT NULL -- Tiempo promedio de tránsito entre los nodos (en segundos)
+);
+
+CREATE TABLE Flujos (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    NodoOrigen INT NOT NULL,  -- Nodo de origen
+    NodoDestino INT NOT NULL,  -- Nodo de destino
+    Flujo VARCHAR(255) NOT NULL,  -- Flujo en formato "Nodo A → Nodo B"
+    CongestionMaxima INT NOT NULL,  -- Congestión máxima
+    TiempoEstimado INT NOT NULL,  -- Tiempo estimado de recorrido en segundos
+    EstadoActual VARCHAR(255) NOT NULL,  -- Estado actual en formato "Nodo X: Y elementos"
+    FechaRegistro DATETIME DEFAULT GETDATE() -- Fecha y hora del registro
+);
+
+
+
+INSERT INTO Semaforos (Nodo, Estado) VALUES (1, 'Rojo');
+INSERT INTO Semaforos (Nodo, Estado) VALUES (2, 'Verde');
+INSERT INTO Semaforos (Nodo, Estado) VALUES (3, 'Rojo');
+
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (1, 2, 'Norte');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (2, 3, 'Sur');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (3, 4, 'Este');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (4, 5, 'Oeste');
+
+INSERT INTO VehiculosEnEspera (Nodo, Cantidad) VALUES (1, 5);
+INSERT INTO VehiculosEnEspera (Nodo, Cantidad) VALUES (2, 3);
+INSERT INTO VehiculosEnEspera (Nodo, Cantidad) VALUES (3, 8);
+
+INSERT INTO TiempoTransito (NodoOrigen, NodoDestino, TiempoPromedio) VALUES (1, 2, 30);
+INSERT INTO TiempoTransito (NodoOrigen, NodoDestino, TiempoPromedio) VALUES (2, 3, 25);
+INSERT INTO TiempoTransito (NodoOrigen, NodoDestino, TiempoPromedio) VALUES (3, 4, 20);
+
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (1, 2, 'Norte');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (2, 3, 'Sur');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (3, 4, 'Este');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (4, 5, 'Oeste');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (1, 3, 'Este');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (2, 4, 'Oeste');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (3, 5, 'Norte');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (4, 6, 'Sur');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (5, 7, 'Este');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (6, 8, 'Oeste');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (7, 9, 'Norte');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (8, 10, 'Sur');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (9, 1, 'Este');
+INSERT INTO Vias (NodoOrigen, NodoDestino, Direccion) VALUES (10, 2, 'Oeste');
+
